@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ตารางแสดงสถานะการใช้ Studio</title>
+    
     <style>
-        /* นี่คือ CSS สำหรับจัดสไตล์ */
         body {
-            font-family: 'Sarabun', sans-serif; /* ใช้ฟอนต์ที่อ่านง่าย */
+            font-family: 'Sarabun', sans-serif; /* หรือฟอนต์อื่นที่รองรับภาษาไทย */
             margin: 20px;
             background-color: #f4f4f4;
         }
@@ -19,7 +19,8 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        /* รูปภาพด้านบน */
+        
+        /* 1. รูปด้านบน */
         #top-image {
             max-width: 100%;
             height: auto;
@@ -27,10 +28,10 @@
             margin-bottom: 20px;
         }
         
-        /* ตารางข้อมูล */
+        /* 2. ตารางข้อมูล */
         #status-table {
             width: 100%;
-            border-collapse: collapse; /* ทำให้เส้นขอบตารางสวยงาม */
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
         #status-table th, #status-table td {
@@ -43,20 +44,22 @@
             color: #333;
         }
 
-        /* ประกาศด้านล่าง */
+        /* 3. ประกาศ */
         .announcement {
             border: 1px dashed #ccc;
             padding: 15px;
             background: #fafafa;
             margin-top: 20px;
         }
+        
+        /* 4. รูปด้านล่าง */
         #bottom-image {
-            max-width: 300px; /* ทำให้รูปด้านล่างไม่ใหญ่เกินไป */
+            max-width: 300px; 
             margin-top: 10px;
             display: block;
         }
         
-        /* เวลาอัพเดท */
+        /* 5. เวลาอัพเดท */
         #update-time {
             font-size: 0.9em;
             color: #777;
@@ -64,7 +67,6 @@
             margin-top: 15px;
         }
         
-        /* สถานะ Loading */
         .loading {
             text-align: center;
             padding: 20px;
@@ -75,7 +77,8 @@
 <body>
 
     <div class="container">
-        <img id="top-image" src="" alt="Header Image">
+        
+        <img id="top-image-loader" src="" alt="Header Image">
 
         <h2>ตารางแสดงสถานะการใช้ Studio</h2>
 
@@ -85,30 +88,23 @@
 
         <div class="announcement">
             <h3>ประกาศ</h3>
-            <p id="announcement-text"></p>
-            <img id="bottom-image" src="" alt="">
+            <p id="announcement-text">...</p>
+            <img id="bottom-image-loader" src="" alt="">
         </div>
 
         <p id="update-time"></p>
     </div>
 
     <script>
-        /*
-         * ---------------------------------
-         * JavaScript (ฝั่ง Client)
-         * ---------------------------------
-         */
-
-        // !! สำคัญ !!
-        // วาง URL ที่คุณคัดลอกจาก Google Apps Script (ขั้นตอนที่ 2) ลงในนี้
-        const WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE"; 
+        
+        // ‼️ URL ของคุณถูกใส่ไว้ในนี้เรียบร้อยแล้ว ‼️
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxh6ooRbX09vsz1km4dpEdLGSWTe5V3Fw2MGIPoMM6aWL6kLDhjZI9HWCro6LGE5FJr/exec"; 
 
         // ฟังก์ชันสำหรับดึงและแสดงข้อมูล
         async function fetchData() {
             const tableContainer = document.getElementById('table-container');
             
             try {
-                // 1. เรียก API
                 const response = await fetch(WEB_APP_URL);
                 if (!response.ok) {
                     throw new Error("ไม่สามารถโหลดข้อมูลได้: " + response.statusText);
@@ -119,47 +115,50 @@
                      throw new Error(data.error);
                 }
 
-                // 2. แสดงรูปภาพด้านบน (B2)
-                document.getElementById('top-image').src = data.topImage;
+                // 1. แสดงรูปภาพด้านบน (B2)
+                document.getElementById('top-image-loader').src = data.topImage;
 
-                // 3. สร้างตาราง (B4:F9)
+                // 2. สร้างตาราง (B4:F9)
                 let html = '<table id="status-table">';
                 
-                // สร้างแถวหัวตาราง (Headers)
-                html += '<thead><tr>';
-                data.table.headers.forEach(header => {
-                    html += `<th>${header}</th>`;
+                // data.table คือข้อมูล [B4:F9] ที่ได้มา
+                data.table.forEach((row, rowIndex) => {
+                    // แถวแรกสุด (rowIndex === 0) คือหัวตาราง (B4:F4)
+                    if (rowIndex === 0) {
+                        html += '<thead><tr>';
+                        row.forEach(headerCell => {
+                            html += `<th>${headerCell}</th>`;
+                        });
+                        html += '</tr></thead>';
+                        html += '<tbody>'; // เริ่มส่วนเนื้อหา
+                    } 
+                    // แถวที่เหลือคือข้อมูล (B5:F9)
+                    else {
+                        html += '<tr>';
+                        row.forEach(cell => {
+                            html += `<td>${cell}</td>`;
+                        });
+                        html += '</tr>';
+                    }
                 });
-                html += '</tr></thead>';
-
-                // สร้างแถวข้อมูล (Data rows)
-                html += '<tbody>';
-                data.table.rows.forEach(row => {
-                    html += '<tr>';
-                    row.forEach(cell => {
-                        html += `<td>${cell}</td>`;
-                    });
-                    html += '</tr>';
-                });
-                html += '</tbody></table>';
+                html += '</tbody></table>'; // ปิดตาราง
                 
                 // แทนที่ "กำลังโหลด..." ด้วยตารางที่สร้างเสร็จ
                 tableContainer.innerHTML = html;
 
-                // 4. แสดงประกาศ (C11)
+                // 3. แสดงประกาศ (C11)
                 document.getElementById('announcement-text').innerText = data.announcement;
 
-                // 5. แสดงรูปภาพด้านล่าง (H13)
-                // (ตรวจสอบก่อนว่ามีลิ้งค์รูปหรือไม่)
+                // 4. แสดงรูปภาพด้านล่าง (H13)
+                const bottomImage = document.getElementById('bottom-image-loader');
                 if (data.bottomImage && data.bottomImage.trim() !== "") {
-                     document.getElementById('bottom-image').src = data.bottomImage;
-                     document.getElementById('bottom-image').style.display = 'block';
+                     bottomImage.src = data.bottomImage;
+                     bottomImage.style.display = 'block';
                 } else {
-                     document.getElementById('bottom-image').style.display = 'none';
+                     bottomImage.style.display = 'none'; // ซ่อนรูปถ้าไม่มีลิ้งค์
                 }
 
-
-                // 6. แสดงเวลาที่อัพเดท (เรียลไทม์ฝั่งผู้ใช้)
+                // 5. แสดงเวลาที่อัพเดท (เรียลไทม์ฝั่งผู้ใช้)
                 const now = new Date();
                 document.getElementById('update-time').innerText = `ข้อมูลอัพเดทเมื่อ: ${now.toLocaleString('th-TH')}`;
 
@@ -173,7 +172,7 @@
         fetchData();
 
         // (ทางเลือก) ตั้งค่าให้ดึงข้อมูลใหม่ทุกๆ 1 นาที (60000 มิลลิวินาที)
-        // ถ้าต้องการให้เรียลไทม์มากขึ้น ให้ลบ // สองตัวข้างหน้าบรรทัดล่างนี้
+        // ถ้าต้องการให้รีเฟรชอัตโนมัติ ให้ลบ // สองตัวข้างหน้าบรรทัดล่างนี้
         // setInterval(fetchData, 60000); 
 
     </script>
