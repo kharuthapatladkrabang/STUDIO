@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางแสดงสถานะการใช้ Studio</title>
+    <title>ตารางแสดงสถานะการใช้ Studio (Real-time)</title>
     
     <style>
         body {
-            font-family: 'Sarabun', sans-serif; /* หรือฟอนต์อื่นที่รองรับภาษาไทย */
+            font-family: 'Sarabun', sans-serif; /* ใช้ฟอนต์ที่รองรับภาษาไทย */
             margin: 20px;
             background-color: #f4f4f4;
         }
@@ -20,15 +20,15 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        /* 1. รูปด้านบน */
-        #top-image {
+        /* รูปภาพด้านบน (B2) */
+        #top-image-loader {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin-bottom: 20px;
         }
         
-        /* 2. ตารางข้อมูล */
+        /* ตาราง (B4:F9) */
         #status-table {
             width: 100%;
             border-collapse: collapse;
@@ -38,13 +38,24 @@
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
+            /* เพิ่ม transition เพื่อความนุ่มนวลตอนสีเปลี่ยน */
+            transition: background-color 0.5s ease;
         }
         #status-table th {
             background-color: #f0f0f0;
             color: #333;
         }
 
-        /* 3. ประกาศ */
+        /* * CSS สำหรับไฮไลต์สีแถว (ที่คุณต้องการ)
+         */
+        #status-table tr.status-green td {
+            background-color: #e6ffed; /* เขียวอ่อน */
+        }
+        #status-table tr.status-red td {
+            background-color: #ffe6e6; /* แดงอ่อน */
+        }
+
+        /* ประกาศ (C11) */
         .announcement {
             border: 1px dashed #ccc;
             padding: 15px;
@@ -52,14 +63,14 @@
             margin-top: 20px;
         }
         
-        /* 4. รูปด้านล่าง */
-        #bottom-image {
+        /* รูปภาพด้านล่าง (H13) */
+        #bottom-image-loader {
             max-width: 300px; 
             margin-top: 10px;
             display: block;
         }
         
-        /* 5. เวลาอัพเดท */
+        /* เวลาอัปเดต */
         #update-time {
             font-size: 0.9em;
             color: #777;
@@ -67,6 +78,7 @@
             margin-top: 15px;
         }
         
+        /* ข้อความ "กำลังโหลด..." */
         .loading {
             text-align: center;
             padding: 20px;
@@ -97,31 +109,46 @@
 
     <script>
         
-        // ‼️ URL ของคุณถูกใส่ไว้ในนี้เรียบร้อยแล้ว ‼️
+        // URL ของ Apps Script ที่คุณให้มา
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxh6ooRbX09vsz1km4dpEdLGSWTe5V3Fw2MGIPoMM6aWL6kLDhjZI9HWCro6LGE5FJr/exec"; 
 
-        // ฟังก์ชันสำหรับดึงและแสดงข้อมูล
+        // ตัวแปรสำหรับเก็บข้อมูลล่าสุด (ป้องกันการกระพริบ)
+        let lastDataString = "";
+
+        // ฟังก์ชันหลักสำหรับดึงและแสดงข้อมูล
         async function fetchData() {
             const tableContainer = document.getElementById('table-container');
             
             try {
+                // 1. ดึงข้อมูลจาก URL
                 const response = await fetch(WEB_APP_URL);
                 if (!response.ok) {
                     throw new Error("ไม่สามารถโหลดข้อมูลได้: " + response.statusText);
                 }
-                const data = await response.json();
+                
+                const dataText = await response.text();
+                
+                // 2. ตรวจสอบว่าข้อมูลมีการเปลี่ยนแปลงหรือไม่
+                //    ถ้าข้อมูลเหมือนเดิม, ให้อัปเดตแค่เวลา และข้ามไปเลย
+                if (dataText === lastDataString) {
+                    updateTimestamp(); // อัปเดตแค่เวลา
+                    return; // จบการทำงาน, ไม่ต้องวาดตารางใหม่
+                }
+                
+                // 3. ถ้าข้อมูลใหม่, ให้ประมวลผลและวาดใหม่
+                lastDataString = dataText;
+                const data = JSON.parse(dataText);
 
                 if (data.error) {
                      throw new Error(data.error);
                 }
 
-                // 1. แสดงรูปภาพด้านบน (B2)
+                // 4. แสดงรูปภาพด้านบน (B2)
                 document.getElementById('top-image-loader').src = data.topImage;
 
-                // 2. สร้างตาราง (B4:F9)
+                // 5. สร้างตาราง (B4:F9)
                 let html = '<table id="status-table">';
                 
-                // data.table คือข้อมูล [B4:F9] ที่ได้มา
                 data.table.forEach((row, rowIndex) => {
                     // แถวแรกสุด (rowIndex === 0) คือหัวตาราง (B4:F4)
                     if (rowIndex === 0) {
@@ -134,7 +161,33 @@
                     } 
                     // แถวที่เหลือคือข้อมูล (B5:F9)
                     else {
-                        html += '<tr>';
+                        // --- ตรรกะการเพิ่มสีแถว ---
+                        let rowClass = '';
+                        
+                        // ข้อมูลตารางดึงมาจาก B4:F9
+                        // ใน array จะนับที่ 0
+                        // B = 0
+                        // C (สถานะ) = 1
+                        // D = 2
+                        // E = 3
+                        // F (หมายเหตุ) = 4
+                        const status = row[1] ? row[1].trim() : '';
+                        const notes = row[4] ? row[4].trim() : '';
+
+                        // กฎที่ 1: ถ้า "หมายเหตุ" (F) มีข้อความ, ให้เป็นสีแดง
+                        if (notes !== "") {
+                            rowClass = 'status-red';
+                        } 
+                        // กฎที่ 2: ถ้าหมายเหตุว่าง, ค่อยเช็ค "สถานะ" (C)
+                        else if (status === "ว่าง") {
+                            rowClass = 'status-green';
+                        } else if (status === "ไม่ว่าง") {
+                            rowClass = 'status-red';
+                        }
+                        // --- จบตรรกะ ---
+
+                        // เพิ่ม class ที่ได้ลงใน <tr>
+                        html += `<tr class="${rowClass}">`;
                         row.forEach(cell => {
                             html += `<td>${cell}</td>`;
                         });
@@ -143,13 +196,13 @@
                 });
                 html += '</tbody></table>'; // ปิดตาราง
                 
-                // แทนที่ "กำลังโหลด..." ด้วยตารางที่สร้างเสร็จ
+                // อัปเดตตารางในหน้าเว็บ
                 tableContainer.innerHTML = html;
 
-                // 3. แสดงประกาศ (C11)
+                // 6. แสดงประกาศ (C11)
                 document.getElementById('announcement-text').innerText = data.announcement;
 
-                // 4. แสดงรูปภาพด้านล่าง (H13)
+                // 7. แสดงรูปภาพด้านล่าง (H13)
                 const bottomImage = document.getElementById('bottom-image-loader');
                 if (data.bottomImage && data.bottomImage.trim() !== "") {
                      bottomImage.src = data.bottomImage;
@@ -158,22 +211,31 @@
                      bottomImage.style.display = 'none'; // ซ่อนรูปถ้าไม่มีลิ้งค์
                 }
 
-                // 5. แสดงเวลาที่อัพเดท (เรียลไทม์ฝั่งผู้ใช้)
-                const now = new Date();
-                document.getElementById('update-time').innerText = `ข้อมูลอัพเดทเมื่อ: ${now.toLocaleString('th-TH')}`;
+                // 8. แสดงเวลาที่อัพเดท
+                updateTimestamp();
 
             } catch (error) {
                 console.error("เกิดข้อผิดพลาด:", error);
-                tableContainer.innerHTML = `<p style="color: red;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ${error.message}</p>`;
+                // แสดงข้อผิดพลาดแค่ครั้งแรก (ตอนที่ยังโหลดไม่ได้)
+                if (tableContainer.innerHTML.includes("loading")) {
+                     tableContainer.innerHTML = `<p style="color: red;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ${error.message}</p>`;
+                }
             }
         }
 
-        // เรียกใช้ฟังก์ชันนี้ทันทีที่หน้าเว็บโหลด
+        // ฟังก์ชันสำหรับอัปเดตเวลา
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('update-time').innerText = `ข้อมูลอัพเดทเมื่อ: ${now.toLocaleString('th-TH')}`;
+        }
+
+        // --- การทำงานแบบ Real-time ---
+
+        // 1. เรียกใช้ฟังก์ชันนี้ทันทีที่หน้าเว็บโหลด
         fetchData();
 
-        // (ทางเลือก) ตั้งค่าให้ดึงข้อมูลใหม่ทุกๆ 1 นาที (60000 มิลลิวินาที)
-        // ถ้าต้องการให้รีเฟรชอัตโนมัติ ให้ลบ // สองตัวข้างหน้าบรรทัดล่างนี้
-        // setInterval(fetchData, 60000); 
+        // 2. ตั้งค่าให้ดึงข้อมูลใหม่ (เรียก fetchData) ทุกๆ 10 วินาที
+        setInterval(fetchData, 10000); // (10000 มิลลิวินาที = 10 วินาที)
 
     </script>
 </body>
