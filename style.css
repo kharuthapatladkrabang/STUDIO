@@ -73,6 +73,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: all 0.3s ease;
+  overflow: hidden; /* **สำคัญ: เพิ่ม overflow: hidden; เพื่อซ่อนส่วนที่รูปภาพอาจเลยขอบ** */
 }
 
 .status-card h1 {
@@ -185,14 +186,14 @@ tr:last-child td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 18px; /* เพิ่มขนาดปุ่มให้ใหญ่ขึ้น */
+  padding: 10px 18px; /* ขนาดปุ่มที่ใหญ่ขึ้น */
   border-radius: 8px; 
   text-decoration: none;
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 3px 5px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.08); 
   transition: all 0.3s ease;
-  min-height: 44px; /* เพิ่มความสูงขั้นต่ำ */
+  min-height: 44px; 
 }
 
 .neural-button:hover {
@@ -222,7 +223,7 @@ tr:last-child td {
   position: relative;
   color: #fff;
   font-weight: 600;
-  font-size: 0.85rem; /* เพิ่มขนาดข้อความในปุ่ม */
+  font-size: 0.85rem; /* ขนาดข้อความในปุ่มที่ใหญ่ขึ้น */
   z-index: 2;
   transition: color 0.3s ease;
 }
