@@ -270,11 +270,11 @@ tr:last-child td {
   }
   
   .neural-button {
-    padding: 6px 12px; /* ปุ่มใหญ่ขึ้นบนมือถือ */
+    padding: 6px 12px; 
     min-height: 36px;
   }
   
   .button-text {
-    font-size: 0.75rem; /* ข้อความใหญ่ขึ้นบนมือถือ */
+    font-size: 0.75rem; 
   }
 }
