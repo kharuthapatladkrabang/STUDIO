@@ -110,11 +110,11 @@ th, td {
 }
 
 /* กำหนดความกว้างของคอลัมน์ที่ปรับใหม่ */
-#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 15%; } /* ห้อง (ลดลง) */
-#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 17%; } /* สถานะ (เพิ่มขึ้นเล็กน้อย) */
+#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 20%; } /* ห้อง */
+#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } /* สถานะ */
 #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 20%; } /* ชั้นปี */
-#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 20%; } /* จำนวนคน (เพิ่มขึ้น) */
-#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 28%; } /* หมายเหตุ (เพิ่มขึ้น) */
+#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 17%; } /* จำนวนคน */
+#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 28%; } /* หมายเหตุ */
 
 th {
   background: #000;
@@ -126,7 +126,7 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* สีตามสถานะ (ปรับขนาดตัวอักษรให้เท่ากับข้อความอื่นในตาราง 0.7rem) */
+/* สีตามสถานะ (ขนาดตัวอักษร 0.7rem) */
 .status-ว่าง {
   background: #a7f3d0;
   color: #065f46;
@@ -185,14 +185,14 @@ tr:last-child td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 12px; /* ขนาดปุ่มที่ปรับลดลง */
+  padding: 10px 18px; /* เพิ่มขนาดปุ่มให้ใหญ่ขึ้น */
   border-radius: 8px; 
   text-decoration: none;
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 3px 5px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.08); 
   transition: all 0.3s ease;
-  min-height: 36px; 
+  min-height: 44px; /* เพิ่มความสูงขั้นต่ำ */
 }
 
 .neural-button:hover {
@@ -222,7 +222,7 @@ tr:last-child td {
   position: relative;
   color: #fff;
   font-weight: 600;
-  font-size: 0.75rem; /* ขนาดข้อความในปุ่มที่ปรับลดลง */
+  font-size: 0.85rem; /* เพิ่มขนาดข้อความในปุ่ม */
   z-index: 2;
   transition: color 0.3s ease;
 }
@@ -270,11 +270,11 @@ tr:last-child td {
   }
   
   .neural-button {
-    padding: 4px 8px; 
-    min-height: 30px;
+    padding: 6px 12px; /* ปุ่มใหญ่ขึ้นบนมือถือ */
+    min-height: 36px;
   }
   
   .button-text {
-    font-size: 0.65rem;
+    font-size: 0.75rem; /* ข้อความใหญ่ขึ้นบนมือถือ */
   }
 }
