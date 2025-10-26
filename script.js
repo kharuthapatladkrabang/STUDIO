@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableBody = document.querySelector("#studioTable tbody");
 
   // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL แล้ว)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxiWWPXMJhEQWoAND_wKNnLbGf9iyrnyOhc_qZS49pWFr34wZACQTUp-pz6HgyU_dqQ/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyzv1KWjDNnBrg_2pxwO61MsHxeiWffSPGMqdv0rC7C5qYaOq9NvwokaywPxpJmjV2T/exec";
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
