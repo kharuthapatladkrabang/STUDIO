@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (data.success && data.rows) {
 
-      // ===== แสดงรูปส่วนหัวจาก H1 (แก้ไขให้เป็นกล่องเต็มขอบบน) =====
+      // ===== แสดงรูปส่วนหัวจาก H1 (แก้ไขการชดเชยขอบและใส่เงา) =====
       if (data.headerImage) {
         const headerImg = document.createElement("img");
         headerImg.src = data.headerImage;
@@ -27,15 +27,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         headerImg.style.borderRadius = "0 0 12px 12px"; 
         headerImg.style.marginTop = "-36px"; // ชดเชย padding-top เดิมของ status-card (36px)
         headerImg.style.marginBottom = "20px"; 
-        headerImg.style.boxShadow = "none"; 
-        
+        headerImg.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; // ใส่เงาเล็กน้อย
+
         const h1Title = statusCard.querySelector('h1'); 
 
         if (h1Title) {
             statusCard.insertBefore(headerImg, h1Title);
             
-            // ปรับ padding-top ของ card ให้เหลือ 15px เพื่อให้ขอบบนดูสวยงาม
-            statusCard.style.paddingTop = "15px";
+            // ปรับ padding-top ของ card
+            statusCard.style.paddingTop = "36px"; 
             h1Title.style.marginTop = "0px"; 
             
         } else {
