@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableBody = document.querySelector("#studioTable tbody");
   const statusCard = document.getElementById("statusCard"); 
 
-  // ✅ ใช้ URL ล่าสุด
+  // ✅ URL ล่าสุดที่คุณให้มา
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzHUzShlYGLAbFkMdACeJvBYJ6P7SUiYAiM2tzfRRjABEPxVxuc0HCGiyPm-iGZT7wP/exec";
 
   try {
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (data.success && data.rows) {
 
-      // ===== แสดงรูปส่วนหัวจาก H1 (โค้ดที่ได้รับการแก้ไขเป็นกล่อง) =====
+      // ===== แสดงรูปส่วนหัวจาก H1 (แก้ไขให้เป็นกล่องเต็มขอบบน) =====
       if (data.headerImage) {
         const headerImg = document.createElement("img");
         headerImg.src = data.headerImage;
@@ -23,20 +23,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         headerImg.style.objectFit = "cover";
         headerImg.style.maxHeight = "120px";
         
-        // **การเปลี่ยนแปลงเพื่อทำเป็นกล่องแยก:**
-        headerImg.style.borderRadius = "12px"; // โค้งมนทั้งสี่ด้าน (เหมือนรูปด้านล่าง)
-        headerImg.style.marginTop = "-15px"; // เลื่อนขึ้นไปชดเชย padding เดิมของ card
-        headerImg.style.marginBottom = "20px"; // เว้นระยะห่างจาก H1
-        headerImg.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; // ใส่เงา (เหมือนรูปด้านล่าง)
+        // ปรับให้รูปภาพมีขอบมนเฉพาะด้านล่าง และใช้ margin-top ติดลบเพื่อดึงรูปขึ้นไปติดขอบบน
+        headerImg.style.borderRadius = "0 0 12px 12px"; 
+        headerImg.style.marginTop = "-36px"; // ชดเชย padding-top เดิมของ status-card (36px)
+        headerImg.style.marginBottom = "20px"; 
+        headerImg.style.boxShadow = "none"; 
         
         const h1Title = statusCard.querySelector('h1'); 
 
         if (h1Title) {
-            // แทรกรูปภาพโดยตรงก่อน h1
             statusCard.insertBefore(headerImg, h1Title);
             
-            // ปรับ padding-top ของ card ให้เหลือเล็กน้อย เพื่อให้กล่องรูปภาพดูมีขอบบน
+            // ปรับ padding-top ของ card ให้เหลือ 15px เพื่อให้ขอบบนดูสวยงาม
             statusCard.style.paddingTop = "15px";
+            h1Title.style.marginTop = "0px"; 
             
         } else {
             statusCard.insertBefore(headerImg, statusCard.firstChild);
