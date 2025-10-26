@@ -99,13 +99,22 @@ table {
   overflow: hidden;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  table-layout: fixed; /* ทำให้ตารางมีขนาดคงที่ */
 }
 
 th, td {
-  padding: 12px 14px;
+  padding: 12px 5px; /* ลด padding เพื่อให้มีพื้นที่มากขึ้น */
   text-align: center;
   border-bottom: 1px solid rgba(0,0,0,0.08);
+  font-size: 0.9rem; /* ปรับขนาดข้อความในเซลล์ทั่วไป */
 }
+
+/* กำหนดความกว้างของคอลัมน์เพื่อให้ช่อง 'ชั้นปี' ใหญ่ขึ้น */
+#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 20%; } /* ห้อง */
+#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } /* สถานะ */
+#studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 25%; } /* ชั้นปี (กว้างขึ้น) */
+#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 20%; } /* จำนวนคน */
+#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 20%; } /* หมายเหตุ */
 
 th {
   background: #000;
@@ -117,18 +126,18 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* สีตามสถานะ (ปรับขนาดตัวอักษรลงเป็น 0.65rem) */
+/* สีตามสถานะ (ปรับขนาดตัวอักษรลงเป็น 0.55rem) */
 .status-ว่าง {
   background: #a7f3d0;
   color: #065f46;
   font-weight: 600;
-  font-size: 0.65rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงอีก */
+  font-size: 0.55rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงมากที่สุด */
 }
 .status-ไม่ว่าง {
   background: #fecaca;
   color: #991b1b;
   font-weight: 600;
-  font-size: 0.65rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงอีก */
+  font-size: 0.55rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงมากที่สุด */
 }
 
 /* ================================================================= */
@@ -199,14 +208,14 @@ tr:last-child td {
 .button-bg {
   position: absolute;
   inset: 0;
-  background: #000; /* พื้นหลังสีดำ */
+  background: rgba(0, 0, 0, 0.75); /* ปรับเป็นสีดำจางๆ (75% opacity) */
   border-radius: 10px;
   transition: background 0.3s ease;
   z-index: 1;
 }
 
 .neural-button:hover .button-bg {
-  background: #1f2937; /* สีเข้มขึ้นเมื่อ Hover */
+  background: rgba(31, 41, 55, 0.9); /* สีเข้มขึ้นเมื่อ Hover */
 }
 
 .button-text {
@@ -241,11 +250,22 @@ tr:last-child td {
   }
 
   th, td {
-    padding: 10px 8px;
-    font-size: 14px;
+    padding: 10px 4px; /* ลด padding บนมือถือ */
+    font-size: 13px; /* ลดขนาด font ในตารางบนมือถือ */
   }
+  
+  /* ปรับขนาดคอลัมน์บนมือถือ */
+  #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 30%; } /* ชั้นปี (กว้างขึ้น) */
+  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 20%; }
+  #studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } 
+  #studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 18%; } 
+  #studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 17%; } 
 
   .status-card h1 {
     font-size: 1.4rem;
+  }
+  
+  .status-ว่าง, .status-ไม่ว่าง {
+    font-size: 0.5rem; /* เล็กที่สุดบนมือถือ */
   }
 }
