@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
 
-  // ✅ ใช้ URL ใหม่ของปลั๊ก
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxQqa4srtD4ytW7905ecN_T2bZfTbCgUYsUqoZOQS1uNW6k9S8-G1qXYoAHzdGIY9OX/exec";
+  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL แล้ว)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxiWWPXMJhEQWoAND_wKNnLbGf9iyrnyOhc_qZS49pWFr34wZACQTUp-pz6HgyU_dqQ/exec";
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
