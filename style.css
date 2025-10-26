@@ -73,7 +73,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: all 0.3s ease;
-  overflow: hidden; /* **สำคัญ: เพิ่ม overflow: hidden; เพื่อซ่อนส่วนที่รูปภาพอาจเลยขอบ** */
+  overflow: hidden; /* **สำคัญ: ต้องมี overflow: hidden; เพื่อซ่อนส่วนที่รูปภาพยื่นออก** */
 }
 
 .status-card h1 {
@@ -186,7 +186,7 @@ tr:last-child td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 18px; 
+  padding: 10px 18px; /* ขนาดปุ่มที่ใหญ่ขึ้น */
   border-radius: 8px; 
   text-decoration: none;
   overflow: hidden;
@@ -223,7 +223,7 @@ tr:last-child td {
   position: relative;
   color: #fff;
   font-weight: 600;
-  font-size: 0.85rem; 
+  font-size: 0.85rem; /* ขนาดข้อความในปุ่มที่ใหญ่ขึ้น */
   z-index: 2;
   transition: color 0.3s ease;
 }
@@ -256,7 +256,7 @@ tr:last-child td {
   }
   
   /* ปรับขนาดคอลัมน์บนมือถือ */
-  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 25%; } /* ห้อง */
+  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 25%; } 
   #studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 17%; } 
   #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 20%; } /* ชั้นปี */
   #studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 18%; } 
