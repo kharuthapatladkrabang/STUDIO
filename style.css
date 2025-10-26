@@ -109,12 +109,12 @@ th, td {
   font-size: 0.7rem; /* ขนาดข้อความในตารางทั้งหมด */
 }
 
-/* กำหนดความกว้างของคอลัมน์ */
-#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 20%; } /* ห้อง */
-#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } /* สถานะ */
+/* กำหนดความกว้างของคอลัมน์ที่ปรับใหม่ */
+#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 15%; } /* ห้อง (ลดลง) */
+#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 17%; } /* สถานะ (เพิ่มขึ้นเล็กน้อย) */
 #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 20%; } /* ชั้นปี */
-#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 18%; } /* จำนวนคน */
-#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 27%; } /* หมายเหตุ */
+#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 20%; } /* จำนวนคน (เพิ่มขึ้น) */
+#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 28%; } /* หมายเหตุ (เพิ่มขึ้น) */
 
 th {
   background: #000;
@@ -255,11 +255,11 @@ tr:last-child td {
   }
   
   /* ปรับขนาดคอลัมน์บนมือถือ */
-  #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 25%; } /* ชั้นปี */
-  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 20%; }
-  #studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } 
-  #studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 18%; } 
-  #studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 22%; } /* หมายเหตุ */
+  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 15%; } 
+  #studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 17%; } 
+  #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 22%; } 
+  #studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 22%; } 
+  #studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 24%; } /* หมายเหตุ */
 
   .status-card h1 {
     font-size: 1.4rem;
