@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
 
-  // URL Web App ของ Google Apps Script (อ่านข้อมูลจากชีต)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx1234567890abcdEFghiJKlmnopQRstUvWXyz/exec"; // 👉 แก้เป็นของปลั๊ก
+  const WEB_APP_URL = "https://script.google.com/macros/s/…/exec";  // 👉 เปลี่ยนเป็น URL Deploy ของคุณ
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
@@ -13,11 +12,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (data.success && data.rows) {
       tableBody.innerHTML = "";
       data.rows.forEach(row => {
-        const tr = document.createElement("tr");
         const [room, status, year, people, note] = row;
+        const tr = document.createElement("tr");
+        const statusClass = (status === "ว่าง") ? "status-ว่าง" : "status-ไม่ว่าง";
         tr.innerHTML = `
           <td>${room || "-"}</td>
-          <td class="status-cell ${status === "ว่าง" ? "status-ว่าง" : "status-ไม่ว่าง"}">${status || "-"}</td>
+          <td class="${statusClass}">${status || "-"}</td>
           <td>${year || "-"}</td>
           <td>${people || "-"}</td>
           <td>${note || "-"}</td>
