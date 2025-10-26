@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
 
-  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL แล้ว)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyzv1KWjDNnBrg_2pxwO61MsHxeiWffSPGMqdv0rC7C5qYaOq9NvwokaywPxpJmjV2T/exec";
+  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุด)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby7GhU5oUZ0BipZPR8ExeGvmHKJ9b4123032VwKiy01vjRCSrdO6pg7alenSZaaCzUw/exec";
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableContainer.appendChild(img);
       }
 
-      // ===== ข้อความจาก C11:F11 =====
+      // ===== ข้อความจาก C11:F11 (รองรับ Line breaks ด้วย white-space: pre-wrap) =====
       if (data.text) {
         const textBox = document.createElement("p");
         textBox.textContent = data.text;
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         textBox.style.fontSize = "0.9rem";
         textBox.style.textAlign = "center";
         textBox.style.lineHeight = "1.4";
+        textBox.style.whiteSpace = "pre-wrap"; // แก้ไข: เพื่อให้รองรับการขึ้นบรรทัด (Line breaks)
         tableContainer.appendChild(textBox);
       }
 
@@ -76,6 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn1.className = "neural-button";
         btn1.style.width = "160px";
         btn1.style.margin = "20px 8px 0 8px";
+        // โครงสร้างปุ่มที่ถูกออกแบบใน style (5).css เพื่อให้เป็นปุ่มกดที่สวยงาม
         btn1.innerHTML = `
           <div class="button-bg"></div>
           <span class="button-text">${data.button1.text}</span>
@@ -92,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn2.className = "neural-button";
         btn2.style.width = "160px";
         btn2.style.margin = "20px 8px 0 8px";
+        // โครงสร้างปุ่มที่ถูกออกแบบใน style (5).css เพื่อให้เป็นปุ่มกดที่สวยงาม
         btn2.innerHTML = `
           <div class="button-bg"></div>
           <span class="button-text">${data.button2.text}</span>
