@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
 
-  const WEB_APP_URL = "https://script.google.com/macros/s/…/exec";  // 👉 เปลี่ยนเป็น URL Deploy ของคุณ
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbytGQSSHYngYKhBy5HE6tWW9Y33Qz4SldkVO5Yinoi7-dB0XLKspRGcgWl_T-4gYfPK/exec";  // 👉 เปลี่ยนเป็น URL Deploy ของคุณ
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
