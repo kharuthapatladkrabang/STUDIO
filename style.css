@@ -1,0 +1,185 @@
+/* ================================================================= */
+/* 1. GLOBAL STYLE */
+/* ================================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.5;
+  transition: background 0.3s ease;
+}
+
+/* ================================================================= */
+/* 2. NEURAL BACKGROUND EFFECT */
+/* ================================================================= */
+.neural-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.neural-node {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: #3b82f6;
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(80px);
+  animation: neuralPulse 6s ease-in-out infinite;
+}
+
+.neural-node:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+.neural-node:nth-child(2) { top: 60%; left: 15%; animation-delay: 1s; }
+.neural-node:nth-child(3) { top: 30%; left: 70%; animation-delay: 2s; }
+.neural-node:nth-child(4) { top: 80%; left: 60%; animation-delay: 3s; }
+.neural-node:nth-child(5) { top: 50%; left: 40%; animation-delay: 4s; }
+
+@keyframes neuralPulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.2); opacity: 0.35; }
+}
+
+/* ================================================================= */
+/* 3. CARD LAYOUT */
+/* ================================================================= */
+.login-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+}
+
+.status-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+.status-card h1 {
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.ai-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 80%);
+  border-radius: 20px;
+  z-index: -1;
+}
+
+/* ================================================================= */
+/* 4. TABLE STYLE */
+/* ================================================================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+th {
+  background: #000;
+  color: #fff;
+  font-weight: 600;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* สีตามสถานะ */
+.status-ว่าง {
+  background: #16a34a;
+  color: #fff;
+  font-weight: 600;
+}
+.status-ไม่ว่าง {
+  background: #dc2626;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ================================================================= */
+/* 5. LOADER */
+/* ================================================================= */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.neural-spinner {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.spinner-segment {
+  width: 6px;
+  height: 25px;
+  background: #3b82f6;
+  border-radius: 3px;
+  animation: neuralSpinner 1.2s ease-in-out infinite;
+}
+
+.spinner-segment:nth-child(2) { animation-delay: 0.1s; }
+.spinner-segment:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes neuralSpinner {
+  0%, 80%, 100% { transform: scaleY(0.5); opacity: 0.8; }
+  40% { transform: scaleY(1); opacity: 1; }
+}
+
+/* ================================================================= */
+/* 6. RESPONSIVE */
+/* ================================================================= */
+@media (max-width: 480px) {
+  .status-card {
+    padding: 28px 20px;
+  }
+
+  th, td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+
+  .status-card h1 {
+    font-size: 1.4rem;
+  }
+}
