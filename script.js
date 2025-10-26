@@ -13,21 +13,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (data.success && data.rows) {
 
-      // ===== แสดงรูปส่วนหัวจาก H1 =====
+      // ===== แสดงรูปส่วนหัวจาก H1 (โค้ดที่ได้รับการแก้ไข) =====
       if (data.headerImage) {
         const headerImg = document.createElement("img");
         headerImg.src = data.headerImage;
         headerImg.alt = "Header Image";
         headerImg.style.width = "100%";
+        headerImg.style.display = "block"; // ทำให้เป็นบล็อกเพื่อจัดการพื้นที่
         headerImg.style.borderRadius = "18px 18px 0 0"; // โค้งเฉพาะด้านบน
-        headerImg.style.marginBottom = "15px";
         headerImg.style.objectFit = "cover";
         headerImg.style.maxHeight = "120px";
-        // แทรกรูปภาพก่อนเนื้อหาอื่น ๆ ใน statusCard
-        statusCard.insertBefore(headerImg, statusCard.firstChild);
         
-        // ปรับ padding ด้านบนของ status-card ให้เป็น 0 หากมีรูปหัว
-        statusCard.style.paddingTop = "0"; 
+        const h1Title = statusCard.querySelector('h1'); // ค้นหาแท็ก h1 (หัวข้อตาราง)
+
+        if (h1Title) {
+            // แทรกรูปภาพทันทีก่อน h1
+            statusCard.insertBefore(headerImg, h1Title);
+            
+            // ปรับ padding ด้านบนของ card ให้เป็น 0 (เพราะรูปภาพจะครอบคลุม)
+            statusCard.style.paddingTop = "0"; 
+
+            // ปรับ margin-top ของ h1 เพื่อให้มีพื้นที่เริ่มต้นสำหรับข้อความ
+            h1Title.style.marginTop = "20px"; 
+        } else {
+            // ถ้าไม่พบ h1 (ไม่น่าจะเกิดขึ้น) ให้ใส่เป็นลูกตัวแรก
+            statusCard.insertBefore(headerImg, statusCard.firstChild);
+        }
       }
       
       // ===== สร้างตาราง =====
@@ -83,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         textBox.style.fontSize = "0.9rem";
         textBox.style.textAlign = "center";
         textBox.style.lineHeight = "1.4";
-        textBox.style.whiteSpace = "pre-wrap"; // แก้ไข: เพื่อให้รองรับการขึ้นบรรทัด (Line breaks)
+        textBox.style.whiteSpace = "pre-wrap"; 
         tableContainer.appendChild(textBox);
       }
 
@@ -96,8 +107,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn1.href = data.button1.url;
         btn1.target = "_blank";
         btn1.className = "neural-button";
-        btn1.style.width = "160px";
-        btn1.style.margin = "20px 8px 0 8px";
+        // ใช้ style จาก CSS ที่ปรับขนาดแล้ว
+        btn1.style.width = "140px"; // กำหนดความกว้างเพื่อให้พอดี
+        btn1.style.margin = "20px 8px 0 8px"; 
         btn1.innerHTML = `
           <div class="button-bg"></div>
           <span class="button-text">${data.button1.text}</span>
@@ -112,7 +124,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn2.href = data.button2.url;
         btn2.target = "_blank";
         btn2.className = "neural-button";
-        btn2.style.width = "160px";
+        // ใช้ style จาก CSS ที่ปรับขนาดแล้ว
+        btn2.style.width = "140px"; // กำหนดความกว้างเพื่อให้พอดี
         btn2.style.margin = "20px 8px 0 8px";
         btn2.innerHTML = `
           <div class="button-bg"></div>
