@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusCard = document.getElementById("statusCard"); // ดึง element card มาใช้สำหรับใส่รูปหัว
 
   // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุด)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby7GhU5oUZ0BipZPR8ExeGvmHKJ9b4123032VwKiy01vjRCSrdO6pg7alenSZaaCzUw/exec";
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzHUzShlYGLAbFkMdACeJvBYJ6P7SUiYAiM2tzfRRjABEPxVxuc0HCGiyPm-iGZT7wP/exec";
 
   try {
     const res = await fetch(WEB_APP_URL + "?action=get_studio_status");
