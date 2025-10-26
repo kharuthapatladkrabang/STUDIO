@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tableBody = document.querySelector("#studioTable tbody");
   const statusCard = document.getElementById("statusCard"); 
 
-  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุดตามที่คุณแจ้งมา)
+  // ✅ ใช้ URL ล่าสุด
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzHUzShlYGLAbFkMdACeJvBYJ6P7SUiYAiM2tzfRRjABEPxVxuc0HCGiyPm-iGZT7wP/exec";
 
   try {
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (data.success && data.rows) {
 
-      // ===== แสดงรูปส่วนหัวจาก H1 (โค้ดที่ได้รับการแก้ไข) =====
+      // ===== แสดงรูปส่วนหัวจาก H1 (โค้ดที่ได้รับการแก้ไขเป็นกล่อง) =====
       if (data.headerImage) {
         const headerImg = document.createElement("img");
         headerImg.src = data.headerImage;
@@ -23,27 +23,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         headerImg.style.objectFit = "cover";
         headerImg.style.maxHeight = "120px";
         
-        // สร้าง div ห่อหุ้มรูปภาพและกำหนดโค้งมนภายนอก
-        const imgWrap = document.createElement("div");
-        imgWrap.style.borderRadius = "18px 18px 0 0";
-        imgWrap.style.overflow = "hidden"; // สำคัญ: ใช้ overflow เพื่อซ่อนขอบที่ไม่ต้องการ
-        imgWrap.style.marginBottom = "15px";
-
-        imgWrap.appendChild(headerImg);
+        // **การเปลี่ยนแปลงเพื่อทำเป็นกล่องแยก:**
+        headerImg.style.borderRadius = "12px"; // โค้งมนทั้งสี่ด้าน (เหมือนรูปด้านล่าง)
+        headerImg.style.marginTop = "-15px"; // เลื่อนขึ้นไปชดเชย padding เดิมของ card
+        headerImg.style.marginBottom = "20px"; // เว้นระยะห่างจาก H1
+        headerImg.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; // ใส่เงา (เหมือนรูปด้านล่าง)
         
         const h1Title = statusCard.querySelector('h1'); 
 
         if (h1Title) {
-            // แทรก div ห่อหุ้มรูปภาพก่อน h1
-            statusCard.insertBefore(imgWrap, h1Title);
+            // แทรกรูปภาพโดยตรงก่อน h1
+            statusCard.insertBefore(headerImg, h1Title);
             
-            // ปรับ padding ด้านบนของ card ให้เป็น 0 (เพราะรูปภาพจะครอบคลุม)
-            statusCard.style.paddingTop = "0"; 
-
-            // ปรับ margin-top ของ h1
-            h1Title.style.marginTop = "20px"; 
+            // ปรับ padding-top ของ card ให้เหลือเล็กน้อย เพื่อให้กล่องรูปภาพดูมีขอบบน
+            statusCard.style.paddingTop = "15px";
+            
         } else {
-            statusCard.insertBefore(imgWrap, statusCard.firstChild);
+            statusCard.insertBefore(headerImg, statusCard.firstChild);
         }
       }
       
@@ -79,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       footer.style.opacity = "0.8";
       tableContainer.appendChild(footer);
 
-      // ===== แสดงรูปจาก H13 =====
+      // ===== แสดงรูปจาก H13 (รูปด้านล่าง) =====
       if (data.image) {
         const img = document.createElement("img");
         img.src = data.image;
