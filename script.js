@@ -2,9 +2,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById("loader");
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
-  const statusCard = document.getElementById("statusCard"); // ดึง element card มาใช้สำหรับใส่รูปหัว
+  const statusCard = document.getElementById("statusCard"); 
 
-  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุด)
+  // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุดตามที่คุณแจ้งมา)
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzHUzShlYGLAbFkMdACeJvBYJ6P7SUiYAiM2tzfRRjABEPxVxuc0HCGiyPm-iGZT7wP/exec";
 
   try {
@@ -19,25 +19,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         headerImg.src = data.headerImage;
         headerImg.alt = "Header Image";
         headerImg.style.width = "100%";
-        headerImg.style.display = "block"; // ทำให้เป็นบล็อกเพื่อจัดการพื้นที่
-        headerImg.style.borderRadius = "18px 18px 0 0"; // โค้งเฉพาะด้านบน
+        headerImg.style.display = "block"; 
         headerImg.style.objectFit = "cover";
         headerImg.style.maxHeight = "120px";
         
-        const h1Title = statusCard.querySelector('h1'); // ค้นหาแท็ก h1 (หัวข้อตาราง)
+        // สร้าง div ห่อหุ้มรูปภาพและกำหนดโค้งมนภายนอก
+        const imgWrap = document.createElement("div");
+        imgWrap.style.borderRadius = "18px 18px 0 0";
+        imgWrap.style.overflow = "hidden"; // สำคัญ: ใช้ overflow เพื่อซ่อนขอบที่ไม่ต้องการ
+        imgWrap.style.marginBottom = "15px";
+
+        imgWrap.appendChild(headerImg);
+        
+        const h1Title = statusCard.querySelector('h1'); 
 
         if (h1Title) {
-            // แทรกรูปภาพทันทีก่อน h1
-            statusCard.insertBefore(headerImg, h1Title);
+            // แทรก div ห่อหุ้มรูปภาพก่อน h1
+            statusCard.insertBefore(imgWrap, h1Title);
             
             // ปรับ padding ด้านบนของ card ให้เป็น 0 (เพราะรูปภาพจะครอบคลุม)
             statusCard.style.paddingTop = "0"; 
 
-            // ปรับ margin-top ของ h1 เพื่อให้มีพื้นที่เริ่มต้นสำหรับข้อความ
+            // ปรับ margin-top ของ h1
             h1Title.style.marginTop = "20px"; 
         } else {
-            // ถ้าไม่พบ h1 (ไม่น่าจะเกิดขึ้น) ให้ใส่เป็นลูกตัวแรก
-            statusCard.insertBefore(headerImg, statusCard.firstChild);
+            statusCard.insertBefore(imgWrap, statusCard.firstChild);
         }
       }
       
@@ -85,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableContainer.appendChild(img);
       }
 
-      // ===== ข้อความจาก C11:F11 (รองรับ Line breaks ด้วย white-space: pre-wrap) =====
+      // ===== ข้อความจาก C11:F11 (รองรับ Line breaks) =====
       if (data.text) {
         const textBox = document.createElement("p");
         textBox.textContent = data.text;
@@ -107,8 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn1.href = data.button1.url;
         btn1.target = "_blank";
         btn1.className = "neural-button";
-        // ใช้ style จาก CSS ที่ปรับขนาดแล้ว
-        btn1.style.width = "140px"; // กำหนดความกว้างเพื่อให้พอดี
+        btn1.style.width = "140px"; 
         btn1.style.margin = "20px 8px 0 8px"; 
         btn1.innerHTML = `
           <div class="button-bg"></div>
@@ -124,8 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn2.href = data.button2.url;
         btn2.target = "_blank";
         btn2.className = "neural-button";
-        // ใช้ style จาก CSS ที่ปรับขนาดแล้ว
-        btn2.style.width = "140px"; // กำหนดความกว้างเพื่อให้พอดี
+        btn2.style.width = "140px"; 
         btn2.style.margin = "20px 8px 0 8px";
         btn2.innerHTML = `
           <div class="button-bg"></div>
