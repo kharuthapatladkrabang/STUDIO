@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById("loader");
   const tableContainer = document.getElementById("tableContainer");
   const tableBody = document.querySelector("#studioTable tbody");
+  const statusCard = document.getElementById("statusCard"); // ดึง element card มาใช้สำหรับใส่รูปหัว
 
   // ✅ ใช้ URL ใหม่ของปลั๊ก (อัปเดต URL ล่าสุด)
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby7GhU5oUZ0BipZPR8ExeGvmHKJ9b4123032VwKiy01vjRCSrdO6pg7alenSZaaCzUw/exec";
@@ -11,6 +12,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json();
 
     if (data.success && data.rows) {
+
+      // ===== แสดงรูปส่วนหัวจาก H1 =====
+      if (data.headerImage) {
+        const headerImg = document.createElement("img");
+        headerImg.src = data.headerImage;
+        headerImg.alt = "Header Image";
+        headerImg.style.width = "100%";
+        headerImg.style.borderRadius = "18px 18px 0 0"; // โค้งเฉพาะด้านบน
+        headerImg.style.marginBottom = "15px";
+        headerImg.style.objectFit = "cover";
+        headerImg.style.maxHeight = "120px";
+        // แทรกรูปภาพก่อนเนื้อหาอื่น ๆ ใน statusCard
+        statusCard.insertBefore(headerImg, statusCard.firstChild);
+        
+        // ปรับ padding ด้านบนของ status-card ให้เป็น 0 หากมีรูปหัว
+        statusCard.style.paddingTop = "0"; 
+      }
+      
       // ===== สร้างตาราง =====
       tableBody.innerHTML = "";
       data.rows.forEach(row => {
@@ -68,8 +87,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableContainer.appendChild(textBox);
       }
 
-      // ===== ปุ่ม 1 (H22 + C22) =====
+      // ===== ปุ่ม 1 และ 2 (รวมกัน) =====
       let buttons = [];
+      
+      // ปุ่ม 1
       if (data.button1 && data.button1.url && data.button1.text) {
         const btn1 = document.createElement("a");
         btn1.href = data.button1.url;
@@ -77,7 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn1.className = "neural-button";
         btn1.style.width = "160px";
         btn1.style.margin = "20px 8px 0 8px";
-        // โครงสร้างปุ่มที่ถูกออกแบบใน style (5).css เพื่อให้เป็นปุ่มกดที่สวยงาม
         btn1.innerHTML = `
           <div class="button-bg"></div>
           <span class="button-text">${data.button1.text}</span>
@@ -86,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         buttons.push(btn1);
       }
 
-      // ===== ปุ่ม 2 (B25 + H25) =====
+      // ปุ่ม 2
       if (data.button2 && data.button2.url && data.button2.text) {
         const btn2 = document.createElement("a");
         btn2.href = data.button2.url;
@@ -94,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         btn2.className = "neural-button";
         btn2.style.width = "160px";
         btn2.style.margin = "20px 8px 0 8px";
-        // โครงสร้างปุ่มที่ถูกออกแบบใน style (5).css เพื่อให้เป็นปุ่มกดที่สวยงาม
         btn2.innerHTML = `
           <div class="button-bg"></div>
           <span class="button-text">${data.button2.text}</span>
@@ -103,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         buttons.push(btn2);
       }
 
-      // ===== แสดงปุ่มคู่กัน =====
+      // ===== แสดงปุ่มคู่กัน (อยู่ข้างกัน) =====
       if (buttons.length > 0) {
         const wrap = document.createElement("div");
         wrap.style.display = "flex";
