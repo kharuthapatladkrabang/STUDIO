@@ -117,18 +117,18 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* สีตามสถานะ */
+/* สีตามสถานะ (ปรับขนาดตัวอักษรลงเป็น 0.65rem) */
 .status-ว่าง {
   background: #a7f3d0;
   color: #065f46;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.65rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงอีก */
 }
 .status-ไม่ว่าง {
   background: #fecaca;
   color: #991b1b;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.65rem; /* ปรับลดขนาดตัวอักษรให้เล็กลงอีก */
 }
 
 /* ================================================================= */
@@ -169,7 +169,71 @@ tr:last-child td {
 }
 
 /* ================================================================= */
-/* 6. RESPONSIVE */
+/* 6. NEURAL BUTTON (ปุ่มกดจริง) */
+/* ================================================================= */
+.neural-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.neural-button:hover {
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.neural-button:active {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) inset, 0 1px 2px rgba(0,0,0,0.05) inset;
+  transform: translateY(1px);
+}
+
+.button-bg {
+  position: absolute;
+  inset: 0;
+  background: #000; /* พื้นหลังสีดำ */
+  border-radius: 10px;
+  transition: background 0.3s ease;
+  z-index: 1;
+}
+
+.neural-button:hover .button-bg {
+  background: #1f2937; /* สีเข้มขึ้นเมื่อ Hover */
+}
+
+.button-text {
+  position: relative;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.button-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(59,130,246,0.5) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.neural-button:hover .button-glow {
+  opacity: 0.2;
+}
+
+
+/* ================================================================= */
+/* 7. RESPONSIVE */
 /* ================================================================= */
 @media (max-width: 480px) {
   .status-card {
