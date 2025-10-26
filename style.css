@@ -11,9 +11,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
   background: #f8fafc;
   min-height: 100vh;
-  overflow: hidden;
+  /* แก้ไข: ลบ 'overflow: hidden;' เพื่ออนุญาตให้เลื่อนหน้าได้ */
+  overflow-y: auto; /* อนุญาตให้เลื่อนเฉพาะในแนวตั้ง */
   display: flex;
-  align-items: center;
+  align-items: center; /* สามารถเปลี่ยนเป็น 'flex-start' หากต้องการให้เนื้อหาเริ่มต้นจากด้านบนเมื่อมีพื้นที่เหลือเฟือ */
   justify-content: center;
   line-height: 1.5;
   transition: background 0.3s ease;
@@ -117,16 +118,18 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* สีตามสถานะ */
+/* สีตามสถานะ (ปรับเป็นโทนพาสเทลและลดขนาดตัวอักษร) */
 .status-ว่าง {
-  background: #16a34a;
-  color: #fff;
+  background: #a7f3d0; /* เขียวพาสเทล (Mint Green) */
+  color: #065f46;      /* ข้อความสีเขียวเข้ม */
   font-weight: 600;
+  font-size: 0.85rem; /* ลดขนาดตัวอักษร */
 }
 .status-ไม่ว่าง {
-  background: #dc2626;
-  color: #fff;
+  background: #fecaca; /* แดงพาสเทล (Light Pink) */
+  color: #991b1b;      /* ข้อความสีแดงเข้ม */
   font-weight: 600;
+  font-size: 0.85rem; /* ลดขนาดตัวอักษร */
 }
 
 /* ================================================================= */
