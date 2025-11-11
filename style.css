@@ -73,7 +73,21 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: all 0.3s ease;
-  overflow: hidden; /* **สำคัญ: ต้องมี overflow: hidden; เพื่อซ่อนส่วนที่รูปภาพยื่นออก** */
+  overflow: hidden; 
+}
+
+/* สไตล์สำหรับโลโก้ใหม่ */
+.logo-container {
+    margin-bottom: 20px; /* เว้นระยะห่างด้านล่างโลโก้ */
+    display: flex;
+    justify-content: center;
+    padding-top: 10px; /* เพิ่ม padding ด้านบนเล็กน้อย */
+}
+
+.app-logo {
+    width: 100px; /* ขนาดโลโก้ที่เหมาะสม */
+    height: auto;
+    border-radius: 8px; /* ขอบมนเล็กน้อย */
 }
 
 .status-card h1 {
@@ -248,6 +262,10 @@ tr:last-child td {
 @media (max-width: 480px) {
   .status-card {
     padding: 28px 20px;
+  }
+  
+  .app-logo {
+      width: 80px; /* ลดขนาดโลโก้บนมือถือ */
   }
 
   th, td {
