@@ -101,15 +101,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             headerImg.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; 
 
             const h1Title = statusCard.querySelector('h1'); 
-            const logoContainer = statusCard.querySelector('.logo-container'); 
             
-            if (h1Title && logoContainer) {
+            if (h1Title) {
                 // แทรกรูปภาพก่อน h1
                 statusCard.insertBefore(headerImg, h1Title); 
                 statusCard.style.paddingTop = "36px"; 
                 h1Title.style.marginTop = "0px"; 
-                // ปรับ margin-bottom ของ logoContainer เพื่อไม่ให้ซ้อนทับรูป Header
-                logoContainer.style.marginBottom = '0px'; 
             } else {
                 statusCard.insertBefore(headerImg, statusCard.firstChild);
             }
@@ -213,3 +210,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         // แสดงข้อความเมื่อโหลดข้อมูลไม่สำเร็จ
         loader.innerHTML = `<p style='color:#ef4444; font-weight:600;'>ไม่สามารถโหลดข้อมูลได้: ${data.message || 'กรุณาตรวจสอบ API Key และสิทธิ์การเข้าถึงชีต'}</p>`;
     }
+});
