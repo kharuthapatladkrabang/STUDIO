@@ -76,20 +76,6 @@ body {
   overflow: hidden; 
 }
 
-/* สไตล์สำหรับโลโก้ใหม่ */
-.logo-container {
-    margin-bottom: 20px; /* เว้นระยะห่างด้านล่างโลโก้ */
-    display: flex;
-    justify-content: center;
-    padding-top: 10px; /* เพิ่ม padding ด้านบนเล็กน้อย */
-}
-
-.app-logo {
-    width: 100px; /* ขนาดโลโก้ที่เหมาะสม */
-    height: auto;
-    border-radius: 8px; /* ขอบมนเล็กน้อย */
-}
-
 .status-card h1 {
   font-size: 1.8rem;
   color: #000;
@@ -264,10 +250,6 @@ tr:last-child td {
     padding: 28px 20px;
   }
   
-  .app-logo {
-      width: 80px; /* ลดขนาดโลโก้บนมือถือ */
-  }
-
   th, td {
     padding: 6px 2px; 
     font-size: 11px; /* ลดขนาด font ในเซลล์ทั่วไปบนมือถือ */
