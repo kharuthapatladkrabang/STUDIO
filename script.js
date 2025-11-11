@@ -1,16 +1,14 @@
 // ข้อมูล Google Sheet และ API Key
-// **สำคัญ:** หากมีการใช้คีย์นี้ในงานจริง ควรพิจารณาการรักษาความปลอดภัยที่เหมาะสม
 const API_KEY = 'AIzaSyBivFhVOiCJdpVF4xNb7vYRNJLxLj60Rk0';
 const SHEET_ID = '1jKl6JVfsqvKi0kEKmn-kL62PvuY50c-cOt4EOKjmNgk';
 const SHEET_NAME = 'ห้อง';
 
 // รายการช่วงเซลล์ทั้งหมดที่ต้องการดึงข้อมูล
-// Sheets API ใช้รูปแบบ SheetName!Range
 const RANGES = [
     `${SHEET_NAME}!H1`,      // 0: Header Image URL
-    `${SHEET_NAME}!B5:F9`,   // 1: Table Data (5 rows x 5 columns)
+    `${SHEET_NAME}!B5:F9`,   // 1: Table Data
     `${SHEET_NAME}!H13`,     // 2: Footer Image URL
-    `${SHEET_NAME}!C11:F11`, // 3: Text below image (จะถูกรวมกัน)
+    `${SHEET_NAME}!C11:F11`, // 3: Text below image
     `${SHEET_NAME}!C22`,     // 4: Button 1 Text
     `${SHEET_NAME}!H22`,     // 5: Button 1 URL
     `${SHEET_NAME}!B25`,     // 6: Button 2 Text
@@ -19,10 +17,9 @@ const RANGES = [
 
 /**
  * ดึงข้อมูลจาก Sheets API โดยใช้ Batch Get Values เพื่อดึงหลายช่วงเซลล์ในการเรียกครั้งเดียว
- * และจัดการโครงสร้างข้อมูลให้เป็นรูปแบบที่โค้ดเดิมใช้งาน
  */
 async function fetchSheetData() {
-    // เข้ารหัส (Encode) ช่วงเซลล์ทั้งหมดสำหรับ URL
+    // สร้าง URL query สำหรับ ranges ที่ต้องการ
     const rangesQuery = RANGES.map(encodeURIComponent).join('&ranges=');
     const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=${rangesQuery}&key=${API_KEY}`;
     
@@ -32,7 +29,6 @@ async function fetchSheetData() {
 
         // ตรวจสอบข้อผิดพลาดของ API
         if (json.error) {
-            // หากเกิดข้อผิดพลาด ให้โยนข้อความข้อผิดพลาดออกมา
             throw new Error(`Sheets API Error: ${json.error.message}`);
         }
 
@@ -41,22 +37,21 @@ async function fetchSheetData() {
         // ฟังก์ชันช่วยดึงค่าจากเซลล์เดียว หรือคืนค่า null หากไม่มีข้อมูล
         const getValue = (index) => {
             const range = valueRanges[index];
-            // ตรวจสอบว่ามีค่าอยู่หรือไม่
             return range.values && range.values.length > 0 && range.values[0].length > 0
-                ? range.values[0][0] // ดึงค่าแรกของแถวแรก
+                ? range.values[0][0]
                 : null;
         };
 
         // ฟังก์ชันช่วยดึงค่าตาราง
         const getTableRows = (index) => {
             const range = valueRanges[index];
-            return range.values || []; // คืนค่าเป็น Array of Arrays สำหรับตาราง (B5:F9)
+            return range.values || [];
         };
         
         // ฟังก์ชันช่วยดึงค่าข้อความที่ต้องรวมเซลล์
         const getJoinedText = (index) => {
             const range = valueRanges[index];
-            // ดึงแถวแรกออกมาแล้วนำมา join ด้วย \n เพื่อจำลองการทำงานเดิมของ Apps Script
+            // รวมค่าในแถวแรกของช่วงเซลล์ด้วย \n เพื่อรองรับการขึ้นบรรทัด
             return range.values && range.values.length > 0 
                 ? range.values[0].join('\n') 
                 : null;
@@ -75,7 +70,6 @@ async function fetchSheetData() {
 
     } catch (error) {
         console.error("Error fetching data from Sheets API:", error);
-        // คืนค่า failure พร้อมข้อความข้อผิดพลาด
         return { success: false, message: error.message };
     }
 }
@@ -86,12 +80,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.querySelector("#studioTable tbody");
     const statusCard = document.getElementById("statusCard"); 
     
-    // ดึงข้อมูล
+    // ดึงข้อมูลเพียงครั้งเดียวเมื่อหน้าเว็บโหลด
     const data = await fetchSheetData();
 
     if (data.success && data.rows && data.rows.length > 0) {
         
-        // ===== แสดงรูปส่วนหัวจาก H1 =====
+        // 1. แสดงรูปส่วนหัวจาก H1
         if (data.headerImage) {
             const headerImg = document.createElement("img");
             headerImg.src = data.headerImage;
@@ -101,28 +95,30 @@ document.addEventListener("DOMContentLoaded", async () => {
             headerImg.style.objectFit = "cover";
             headerImg.style.maxHeight = "120px";
             
-            // ปรับให้รูปภาพมีขอบมนเฉพาะด้านล่าง และใช้ margin-top ติดลบเพื่อดึงรูปขึ้นไปติดขอบบน
             headerImg.style.borderRadius = "0 0 12px 12px"; 
-            headerImg.style.marginTop = "-36px"; // ชดเชย padding-top เดิมของ status-card (36px)
+            headerImg.style.marginTop = "-36px"; // ชดเชย padding-top ของ status-card
             headerImg.style.marginBottom = "20px"; 
             headerImg.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; 
 
             const h1Title = statusCard.querySelector('h1'); 
-
-            if (h1Title) {
-                statusCard.insertBefore(headerImg, h1Title);
+            const logoContainer = statusCard.querySelector('.logo-container'); 
+            
+            if (h1Title && logoContainer) {
+                // แทรกรูปภาพก่อน h1
+                statusCard.insertBefore(headerImg, h1Title); 
                 statusCard.style.paddingTop = "36px"; 
                 h1Title.style.marginTop = "0px"; 
+                // ปรับ margin-bottom ของ logoContainer เพื่อไม่ให้ซ้อนทับรูป Header
+                logoContainer.style.marginBottom = '0px'; 
             } else {
                 statusCard.insertBefore(headerImg, statusCard.firstChild);
             }
         }
         
-        // ===== สร้างตาราง =====
+        // 2. สร้างตาราง
         tableBody.innerHTML = "";
         data.rows.forEach(row => {
-            // โค้ดจะอ้างอิงตามคอลัมน์ B, C, D, E, F
-            // ใช้ .map(cell => cell || '-') เพื่อรับประกันว่าทุกคอลัมน์จะมีค่า (แม้จะเป็น '-')
+            // ตรวจสอบว่ามี 5 คอลัมน์หรือไม่
             const [room, status, year, people, note] = row.map(cell => cell || '-'); 
             const tr = document.createElement("tr");
             const statusText = (status || "").trim();
@@ -141,9 +137,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         loader.style.display = "none";
         tableContainer.style.display = "block";
 
-        // ===== แสดงเวลาอัปเดต =====
+        // 3. แสดงเวลาอัปเดต (เวลาที่ข้อมูลถูกโหลดมาครั้งแรก)
         const updateTime = new Date();
-        const options = { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" };
+        const options = { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" };
         const footer = document.createElement("p");
         footer.textContent = `อัปเดตล่าสุด: ${updateTime.toLocaleString("th-TH", options)}`;
         footer.style.fontSize = "0.75rem";
@@ -153,7 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         footer.style.opacity = "0.8";
         tableContainer.appendChild(footer);
 
-        // ===== แสดงรูปจาก H13 =====
+        // 4. แสดงรูปจาก H13
         if (data.image) {
             const img = document.createElement("img");
             img.src = data.image;
@@ -165,68 +161,55 @@ document.addEventListener("DOMContentLoaded", async () => {
             tableContainer.appendChild(img);
         }
 
-        // ===== ข้อความจาก C11:F11 =====
+        // 5. ข้อความจาก C11:F11
         if (data.text) {
             const textBox = document.createElement("p");
-            // ใช้ pre-wrap เพื่อรองรับการขึ้นบรรทัดใหม่ (\n) จากการรวมเซลล์
-            textBox.textContent = data.text; 
+            textBox.textContent = data.text; // รองรับ \n จากการ join
             textBox.style.marginTop = "10px";
             textBox.style.color = "#374151";
             textBox.style.fontSize = "0.9rem";
             textBox.style.textAlign = "center";
             textBox.style.lineHeight = "1.4";
-            textBox.style.whiteSpace = "pre-wrap"; 
+            textBox.style.whiteSpace = "pre-wrap"; // สำคัญสำหรับการแสดง \n
             tableContainer.appendChild(textBox);
         }
 
-        // ===== ปุ่ม 1 และ 2 =====
+        // 6. ปุ่ม 1 และ 2
         let buttons = [];
+        const buttonsWrap = document.createElement("div");
+        buttonsWrap.style.display = "flex";
+        buttonsWrap.style.justifyContent = "center";
+        buttonsWrap.style.flexWrap = "wrap";
+        buttonsWrap.style.marginTop = "10px";
+        tableContainer.appendChild(buttonsWrap);
         
-        // ปุ่ม 1
-        if (data.button1.url && data.button1.text) {
-            const btn1 = document.createElement("a");
-            btn1.href = data.button1.url;
-            btn1.target = "_blank";
-            btn1.className = "neural-button";
-            btn1.style.width = "140px"; 
-            btn1.style.margin = "20px 8px 0 8px"; 
-            btn1.innerHTML = `
-            <div class="button-bg"></div>
-            <span class="button-text">${data.button1.text}</span>
-            <div class="button-glow"></div>
-            `;
-            buttons.push(btn1);
-        }
+        const createButton = (btnData) => {
+            if (btnData.url && btnData.text) {
+                const btn = document.createElement("a");
+                btn.href = btnData.url;
+                btn.target = "_blank";
+                btn.className = "neural-button";
+                btn.style.width = "140px"; 
+                btn.style.margin = "20px 8px 0 8px"; 
+                btn.innerHTML = `
+                <div class="button-bg"></div>
+                <span class="button-text">${btnData.text}</span>
+                <div class="button-glow"></div>
+                `;
+                return btn;
+            }
+            return null;
+        };
+        
+        const btn1 = createButton(data.button1);
+        const btn2 = createButton(data.button2);
 
-        // ปุ่ม 2
-        if (data.button2.url && data.button2.text) {
-            const btn2 = document.createElement("a");
-            btn2.href = data.button2.url;
-            btn2.target = "_blank";
-            btn2.className = "neural-button";
-            btn2.style.width = "140px"; 
-            btn2.style.margin = "20px 8px 0 8px";
-            btn2.innerHTML = `
-            <div class="button-bg"></div>
-            <span class="button-text">${data.button2.text}</span>
-            <div class="button-glow"></div>
-            `;
-            buttons.push(btn2);
-        }
-
-        // ===== แสดงปุ่มคู่กัน (อยู่ข้างกัน) =====
-        if (buttons.length > 0) {
-            const wrap = document.createElement("div");
-            wrap.style.display = "flex";
-            wrap.style.justifyContent = "center";
-            wrap.style.flexWrap = "wrap";
-            wrap.style.marginTop = "10px";
-            buttons.forEach(btn => wrap.appendChild(btn));
-            tableContainer.appendChild(wrap);
-        }
-
+        if (btn1) buttons.push(btn1);
+        if (btn2) buttons.push(btn2);
+        
+        buttons.forEach(btn => buttonsWrap.appendChild(btn));
+        
     } else {
         // แสดงข้อความเมื่อโหลดข้อมูลไม่สำเร็จ
         loader.innerHTML = `<p style='color:#ef4444; font-weight:600;'>ไม่สามารถโหลดข้อมูลได้: ${data.message || 'กรุณาตรวจสอบ API Key และสิทธิ์การเข้าถึงชีต'}</p>`;
     }
-});
