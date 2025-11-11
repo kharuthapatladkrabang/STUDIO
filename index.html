@@ -1,49 +1,299 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>สถานะการใช้ Studio</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body class="light-mode">
-  <div class="neural-background">
-    <div class="neural-node"></div>
-    <div class="neural-node"></div>
-    <div class="neural-node"></div>
-    <div class="neural-node"></div>
-    <div class="neural-node"></div>
-  </div>
+/* ================================================================= */
+/* 1. GLOBAL STYLE */
+/* ================================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  <div class="login-container">
-    <div class="status-card" id="statusCard">
-      <div class="ai-glow"></div>
-      <h1>สถานะการใช้ Studio</h1>
-      <div id="loader" class="loader">
-        <div class="neural-spinner">
-          <div class="spinner-segment"></div>
-          <div class="spinner-segment"></div>
-          <div class="spinner-segment"></div>
-        </div>
-        <p>กำลังโหลดข้อมูล...</p>
-      </div>
-      <div id="tableContainer" style="display:none;">
-        <table id="studioTable">
-          <thead>
-            <tr>
-              <th>ห้อง</th>
-              <th>สถานะ</th>
-              <th>ชั้นปี</th>
-              <th>จำนวนคน</th>
-              <th>หมายเหตุ</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+  overflow-y: auto; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  line-height: 1.5;
+  transition: background 0.3s ease;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+/* ================================================================= */
+/* 2. NEURAL BACKGROUND EFFECT */
+/* ================================================================= */
+.neural-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.neural-node {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: #3b82f6;
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(80px);
+  animation: neuralPulse 6s ease-in-out infinite;
+}
+
+.neural-node:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+.neural-node:nth-child(2) { top: 60%; left: 15%; animation-delay: 1s; }
+.neural-node:nth-child(3) { top: 30%; left: 70%; animation-delay: 2s; }
+.neural-node:nth-child(4) { top: 80%; left: 60%; animation-delay: 3s; }
+.neural-node:nth-child(5) { top: 50%; left: 40%; animation-delay: 4s; }
+
+@keyframes neuralPulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.2); opacity: 0.35; }
+}
+
+/* ================================================================= */
+/* 3. CARD LAYOUT */
+/* ================================================================= */
+.login-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+}
+
+.status-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 36px 28px;
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+  overflow: hidden; 
+}
+
+/* สไตล์สำหรับโลโก้ใหม่ */
+.logo-container {
+    margin-bottom: 20px; /* เว้นระยะห่างด้านล่างโลโก้ */
+    display: flex;
+    justify-content: center;
+    padding-top: 10px; /* เพิ่ม padding ด้านบนเล็กน้อย */
+}
+
+.app-logo {
+    width: 100px; /* ขนาดโลโก้ที่เหมาะสม */
+    height: auto;
+    border-radius: 8px; /* ขอบมนเล็กน้อย */
+}
+
+.status-card h1 {
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.ai-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 80%);
+  border-radius: 20px;
+  z-index: -1;
+}
+
+/* ================================================================= */
+/* 4. TABLE STYLE */
+/* ================================================================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  table-layout: fixed; 
+}
+
+th, td {
+  padding: 8px 3px; 
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  font-size: 0.7rem; /* ขนาดข้อความในตารางทั้งหมด */
+}
+
+/* กำหนดความกว้างของคอลัมน์ที่ปรับใหม่ */
+#studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 25%; } /* ห้อง (เพิ่มขึ้น) */
+#studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 15%; } /* สถานะ */
+#studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 18%; } /* ชั้นปี (ลดลงเล็กน้อย) */
+#studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 17%; } /* จำนวนคน */
+#studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 25%; } /* หมายเหตุ */
+
+th {
+  background: #000;
+  color: #fff;
+  font-weight: 600;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* สีตามสถานะ (ขนาดตัวอักษร 0.7rem) */
+.status-ว่าง {
+  background: #a7f3d0;
+  color: #065f46;
+  font-weight: 600;
+  font-size: 0.7rem; 
+}
+.status-ไม่ว่าง {
+  background: #fecaca;
+  color: #991b1b;
+  font-weight: 600;
+  font-size: 0.7rem; 
+}
+
+/* ================================================================= */
+/* 5. LOADER */
+/* ================================================================= */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.neural-spinner {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.spinner-segment {
+  width: 6px;
+  height: 25px;
+  background: #3b82f6;
+  border-radius: 3px;
+  animation: neuralSpinner 1.2s ease-in-out infinite;
+}
+
+.spinner-segment:nth-child(2) { animation-delay: 0.1s; }
+.spinner-segment:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes neuralSpinner {
+  0%, 80%, 100% { transform: scaleY(0.5); opacity: 0.8; }
+  40% { transform: scaleY(1); opacity: 1; }
+}
+
+/* ================================================================= */
+/* 6. NEURAL BUTTON (ปุ่มกดจริง) */
+/* ================================================================= */
+.neural-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px; /* ขนาดปุ่มที่ใหญ่ขึ้น */
+  border-radius: 8px; 
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.08); 
+  transition: all 0.3s ease;
+  min-height: 44px; 
+}
+
+.neural-button:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+.neural-button:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) inset, 0 0.5px 1px rgba(0,0,0,0.05) inset;
+  transform: translateY(1px);
+}
+
+.button-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75); /* สีดำจางๆ */
+  border-radius: 8px;
+  transition: background 0.3s ease;
+  z-index: 1;
+}
+
+.neural-button:hover .button-bg {
+  background: rgba(31, 41, 55, 0.9);
+}
+
+.button-text {
+  position: relative;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem; /* ขนาดข้อความในปุ่มที่ใหญ่ขึ้น */
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.button-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(59,130,246,0.5) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.neural-button:hover .button-glow {
+  opacity: 0.2;
+}
+
+
+/* ================================================================= */
+/* 7. RESPONSIVE */
+/* ================================================================= */
+@media (max-width: 480px) {
+  .status-card {
+    padding: 28px 20px;
+  }
+  
+  .app-logo {
+      width: 80px; /* ลดขนาดโลโก้บนมือถือ */
+  }
+
+  th, td {
+    padding: 6px 2px; 
+    font-size: 11px; /* ลดขนาด font ในเซลล์ทั่วไปบนมือถือ */
+  }
+  
+  /* ปรับขนาดคอลัมน์บนมือถือ */
+  #studioTable th:nth-child(1), #studioTable td:nth-child(1) { width: 25%; } 
+  #studioTable th:nth-child(2), #studioTable td:nth-child(2) { width: 17%; } 
+  #studioTable th:nth-child(3), #studioTable td:nth-child(3) { width: 20%; } /* ชั้นปี */
+  #studioTable th:nth-child(4), #studioTable td:nth-child(4) { width: 18%; } 
+  #studioTable th:nth-child(5), #studioTable td:nth-child(5) { width: 20%; } /* หมายเหตุ */
+
+  .status-card h1 {
+    font-size: 1.4rem;
+  }
+  
+  .status-ว่าง, .status-ไม่ว่าง {
+    font-size: 0.7rem; /* ทำให้เท่ากับเซลล์อื่นบนมือถือ */
+  }
+  
+  .neural-button {
+    padding: 6px 12px; 
+    min-height: 36px;
+  }
+  
+  .button-text {
+    font-size: 0.75rem; 
+  }
+}
